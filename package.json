@@ -1,0 +1,17 @@
+{
+  "name": "nodejsdemo",
+  "version": "1.0.0",
+  "description": "Demo Nodejs & MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TuanVH",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.13.6"
+  }
+}
