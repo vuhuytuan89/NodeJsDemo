@@ -1,16 +1,33 @@
 var express = require("express");
 var app = express();
 
-// setup view engine
+//
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
+var flash    = require('connect-flash');
+
+// set up our express application
 app.set("view engine", "ejs");
 app.set("views", "./views");
 app.use(express.static(__dirname + "/public"));
-
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
 var engine = require('ejs-locals');
 app.engine('ejs', engine);
 
-var routerIndex = require("./routers/index")(app);
+require('./configs/passport')(passport); // pass passport for configuration
+// required for passport
+app.use(session({ secret: 'xxxxxxxxxyyyyyyyzzzzzz' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+// require router
+var routerIndex = require("./routers/index")(app, passport);
 var routerUser = require("./routers/user")(app);
+var routerUser = require("./routers/post")(app);
 // create server
 var server = require("http").createServer(app);
 server.listen(3000, function() {
@@ -19,17 +36,10 @@ server.listen(3000, function() {
     console.log("Created Server: " + address + port);
 })
 
-var options = {
-    useMongoClient: true,
-    autoIndex: false, // Don't build indexes
-    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
-    reconnectInterval: 500, // Reconnect every 500ms
-    poolSize: 10, // Maintain up to 10 socket connections
-    // If not connected, return errors immediately rather than waiting for reconnect
-    bufferMaxEntries: 0
-  };
+//connect db mongoodb
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/blog", options).then(
+var configDB = require('./configs/database.js');
+mongoose.connect(configDB.url, {useMongoClient: true}).then(
   () => { console.log("Connect DB Mongoodb successfuly")},
   err => { console.log("Connection failed, Error:  ${err} ")}
 );
