@@ -1,17 +1,17 @@
 <% layout('../layoutdefault') %>
+<!-- Insert Body here -->
+<div class="container">
 
-<div class="page-header text-center">
+<div class="page-header text-center" style="margin-top:100px">
     <h1><span class="fa fa-anchor"></span> Profile Page</h1>
     <a href="/logout" class="btn btn-default btn-sm">Logout</a>
 </div>
 
 <div class="row">
-
     <!-- LOCAL INFORMATION -->
-    <div class="col-sm-6">
+    <div class="col-lg-8">
         <div class="well">
-            <h3><span class="fa fa-user"></span> Local</h3>
-
+            <h3><span class="fa fa-user"></span> Local Information</h3>
                 <p>
                     <strong>id</strong>: <%= user._id %><br>
                     <strong>Full Name</strong>: <%= user.local.fullname %><br>
@@ -21,5 +21,6 @@
 
         </div>
     </div>
-
+    <% include ../partials/sidebar %>
+</div>
 </div>

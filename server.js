@@ -1,7 +1,6 @@
 var express = require("express");
 var app = express();
 
-//
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
@@ -30,7 +29,7 @@ var routerUser = require("./routers/user")(app);
 var routerUser = require("./routers/post")(app);
 // create server
 var server = require("http").createServer(app);
-server.listen(3000, function() {
+server.listen(process.env.PORT || 3000, function() {
     var address = server.address().address;
     var port = server.address().port;
     console.log("Created Server: " + address + port);
@@ -44,3 +43,8 @@ mongoose.connect(configDB.url, {useMongoClient: true}).then(
   err => { console.log("Connection failed, Error:  ${err} ")}
 );
 
+app.use(function(req, res, next) {
+  res.locals.query = req.query;
+  res.locals.url   = req.originalUrl;
+  next();
+});
